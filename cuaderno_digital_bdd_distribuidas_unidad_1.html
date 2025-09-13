@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cuaderno Digital | Sistemas de Bases de Datos Distribuidas</title>
+  <meta name="description" content="Cuaderno Digital de la Unidad 1: Sistemas de Bases de Datos Distribuidas. Incluye portada, secciones temáticas (conceptos, diseño, procesamiento de actualizaciones, consultas y transacciones) y reflexión personal." />
+  <style>
+    :root{
+      --bg: #0f172a;          /* slate-900 */
+      --panel:#111827;        /* gray-900 */
+      --ink:#e5e7eb;          /* gray-200 */
+      --muted:#94a3b8;        /* slate-400 */
+      --brand:#06b6d4;        /* cyan-500 */
+      --accent:#22c55e;       /* green-500 */
+      --warn:#f59e0b;         /* amber-500 */
+      --danger:#ef4444;       /* red-500 */
+      --card:#0b1022;
+      --line:#1f2937;         /* gray-800 */
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg, #0b1022, #0f172a 40%);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";line-height:1.65}
+    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
+    header{position:sticky;top:0;background:rgba(11,16,34,.8);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);z-index:20}
+    .wrap{max-width:1100px;margin:0 auto;padding:14px 18px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,#22d3ee,#60a5fa,#a78bfa,#22d3ee);box-shadow:0 0 24px #22d3ee33}
+    nav{display:flex;gap:16px;flex-wrap:wrap}
+    .top{display:flex;justify-content:space-between;align-items:center}
+    .btn{background:#0b132b;border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:12px;cursor:pointer}
+    .btn:hover{border-color:#2dd4bf}
+
+    .hero{padding:60px 18px 36px;background:radial-gradient(1200px 400px at 50% -10%, #1f2937 0%, transparent 60%)}
+    .hero .card{background:linear-gradient(180deg,#0b132b,#0b1022);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:.9rem}
+    .title{font-size:clamp(26px,4vw,40px);line-height:1.15;margin:.4rem 0 1rem}
+    .subtitle{color:var(--muted)}
+    .meta{margin:20px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .meta div{border:1px dashed #233046;padding:10px;border-radius:12px}
+    .coverVisual{min-height:240px;border:1px solid var(--line);border-radius:16px;position:relative;background:radial-gradient(450px 220px at 20% 10%,#0ea5e9 0%,transparent 55%), radial-gradient(450px 220px at 80% 90%,#22c55e 0%,transparent 55%), linear-gradient(180deg,#0b1022,#0b132b)}
+    .coverVisual::after{content:"BDD";position:absolute;inset:auto 16px 12px auto;font-weight:700;color:#93c5fd33;font-size:96px;letter-spacing:.12em}
+
+    section{padding:26px 18px;border-top:1px solid var(--line)}
+    h2{font-size:clamp(22px,3vw,32px);margin:0 0 10px}
+    h3{font-size:clamp(18px,2.2vw,22px);margin:18px 0 8px}
+    p{margin:.4rem 0}
+    .card{background:linear-gradient(180deg,#0b132b,#0b1022);border:1px solid var(--line);border-radius:16px;padding:18px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .col-6{grid-column:span 6}
+    .col-4{grid-column:span 4}
+    .col-8{grid-column:span 8}
+    .col-12{grid-column:span 12}
+
+    ul{margin:.3rem 0 .2rem 1.1rem}
+    li{margin:.2rem 0}
+    code,.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;background:#0a0f22;border:1px solid #1e293b;padding:.15rem .35rem;border-radius:6px}
+    pre{background:#0a0f22;border:1px solid #1e293b;border-radius:12px;padding:12px;overflow:auto}
+
+    details{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:linear-gradient(180deg,#0b1026,#0b1022)}
+    details+details{margin-top:10px}
+    details summary{cursor:pointer;color:#cbd5e1;font-weight:600}
+
+    table{width:100%;border-collapse:collapse;margin:.4rem 0;border:1px solid var(--line)}
+    th,td{border:1px solid var(--line);padding:.6rem;text-align:left}
+    th{background:#0e1630}
+
+    .toc{display:flex;flex-wrap:wrap;gap:8px}
+    .toc a{border:1px solid var(--line);padding:6px 10px;border-radius:10px;color:#cbd5e1}
+    .toc a:hover{border-color:#60a5fa}
+
+    .note{border-left:4px solid var(--brand);padding:.6rem .8rem;background:#0b132b;border-radius:8px}
+    .ok{border-left-color:var(--accent)}
+    .warn{border-left-color:var(--warn)}
+
+    footer{padding:40px 18px;color:#9ca3af;text-align:center}
+
+    /* Print/PDF */
+    @media print{
+      header,.btnBar,.coverVisual::after{display:none!important}
+      body{background:#fff;color:#111}
+      section, .hero{page-break-inside:avoid}
+      .card, .pill{border-color:#999}
+      a{color:#111}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap top">
+      <div class="brand"><div class="logo" aria-hidden="true"></div>
+        <div>
+          <strong>Cuaderno Digital</strong><div style="font-size:.9rem;color:var(--muted)">Unidad 1 • Bases de Datos Distribuidas</div>
+        </div>
+      </div>
+      <div class="btnBar" role="group" aria-label="acciones rápidas">
+        <button class="btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+        <button class="btn" id="toggleTheme">Modo claro/oscuro</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Portada -->
+  <div class="hero">
+    <div class="wrap">
+      <div class="card">
+        <div>
+          <span class="pill">Páginas de presentación</span>
+          <h1 class="title">Sistemas de Bases de Datos Distribuidas</h1>
+          <p class="subtitle">Cuaderno digital que cubre los temas de la Unidad 1: conceptos, diseño, procesamiento de actualizaciones y consultas, y manejo de transacciones.</p>
+          <div class="meta">
+            <div>
+              <strong>Estudiante:</strong> Roxana Guzmán<br/>
+              <strong>Programa:</strong> Ingeniería Informática
+            </div>
+            <div>
+              <strong>Asignatura:</strong> Bases de Datos Distribuidas<br/>
+              <strong>Fecha:</strong> <span id="today"></span>
+            </div>
+            <div>
+              <strong>Institución:</strong> Instituto Tecnológico Superior de Pánuco
+            </div>
+            <div>
+              <strong>Docente:</strong> ______________________
+            </div>
+          </div>
+          <div class="note ok">Propósito de la unidad: comprender los principios, el diseño y la operación de una base de datos distribuida para construir soluciones escalables, tolerantes a fallos y con buen rendimiento.</div>
+        </div>
+        <div class="coverVisual" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Índice -->
+  <section>
+    <div class="wrap">
+      <h2>Índice (secciones temáticas)</h2>
+      <div class="toc">
+        <a href="#conceptos">1. Conceptos de bases de datos distribuidas</a>
+        <a href="#diseno">2. Diseño de bases de datos distribuidas</a>
+        <a href="#actualizaciones">3. Procesamiento de operaciones de actualización distribuidas</a>
+        <a href="#consultas">4. Procesamiento de consultas distribuidas</a>
+        <a href="#transacciones">5. Manejo de transacciones</a>
+        <a href="#reflexion">Reflexión personal</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Conceptos -->
+  <section id="conceptos">
+    <div class="wrap">
+      <h2>1. Conceptos de base de datos distribuidas</h2>
+      <div class="grid">
+        <div class="col-8">
+          <div class="card">
+            <h3>¿Qué es una BDD?</h3>
+            <p>Una <strong>base de datos distribuida (BDD)</strong> es un conjunto de datos lógicamente relacionados que se almacenan y procesan en múltiples nodos (sitios) interconectados por una red. El sistema debe brindar una <em>vista única</em> de los datos pese a su distribución física.</p>
+            <h3>Objetivos clave</h3>
+            <ul>
+              <li><strong>Escalabilidad</strong>: crecer en capacidad agregando nodos.</li>
+              <li><strong>Disponibilidad</strong> y <strong>tolerancia a fallos</strong>: seguir operando ante caídas parciales.</li>
+              <li><strong>Rendimiento</strong>: acercar los datos al lugar donde se consumen.</li>
+              <li><strong>Autonomía local</strong>: cada nodo administra sus recursos.</li>
+            </ul>
+            <h3>Transparencias (metas de diseño)</h3>
+            <ul>
+              <li><strong>Ubicación</strong>: el usuario no necesita saber en qué nodo están los datos.</li>
+              <li><strong>Fragmentación</strong> y <strong>replicación</strong>: acceso uniforme sin importar cómo se dividieron/duplicaron los datos.</li>
+              <li><strong>Concurrencia</strong> y <strong>fallos</strong>: las transacciones parecen seriales y atómicas aun con fallos.</li>
+              <li><strong>Heterogeneidad</strong>: interoperar entre distintos motores/formatos (cuando aplique).</li>
+            </ul>
+            <h3>Arquitecturas típicas</h3>
+            <ul>
+              <li><strong>Cliente/servidor</strong> (coordinador y varios servidores de datos).</li>
+              <li><strong>Peer‑to‑peer</strong> (nodos simétricos que comparten responsabilidades).</li>
+              <li><strong>Multimaestro</strong> (escrituras en múltiples réplicas con protocolos de consenso).</li>
+            </ul>
+            <h3>CAP (intuición)</h3>
+            <p>En presencia de particiones de red, un sistema distribuido debe elegir priorizar <strong>Consistencia</strong> o <strong>Disponibilidad</strong>, manteniendo siempre <strong>Tolerancia a particiones</strong>. Muchas BDD tradicionales priorizan consistencia fuerte; otras adoptan consistencia eventual para alta disponibilidad.</p>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card">
+            <h3>Ejemplo breve</h3>
+<pre><code>-- Consulta global (vista única)
+SELECT c.nombre, p.total
+FROM Clientes@S1 c
+JOIN Pedidos@S2 p ON p.cliente_id = c.id
+WHERE p.fecha &gt;= '2025-01-01';
+</code></pre>
+            <p class="subtitle">La consulta ignora la ubicación real: <code>@S1</code> y <code>@S2</code> indican sitios físicos distintos, pero el optimizador decide cómo y dónde ejecutar.</p>
+            <div class="note warn">Reto: minimizar el tráfico de red y mantener la coherencia entre nodos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Diseño -->
+  <section id="diseno">
+    <div class="wrap">
+      <h2>2. Diseño de base de datos distribuidas</h2>
+      <div class="grid">
+        <div class="col-6">
+          <div class="card">
+            <h3>Fragmentación</h3>
+            <p>Dividir una relación en partes llamadas <em>fragmentos</em> conservando reconstrucción por unión/proyección:</p>
+            <table>
+              <thead><tr><th>Tipo</th><th>Idea</th><th>Ventajas</th><th>Cuidados</th></tr></thead>
+              <tbody>
+                <tr><td>Horizontal</td><td>Filas por predicados (p.ej., región)</td><td>Localidad de acceso</td><td>Predicados completos y disjuntos</td></tr>
+                <tr><td>Vertical</td><td>Columnas por grupos de uso</td><td>Menos E/S y exposición</td><td>Incluir clave para <em>recomposición</em></td></tr>
+                <tr><td>Mixta</td><td>Combinación H+V</td><td>Flexibilidad</td><td>Complejidad de catálogo</td></tr>
+              </tbody>
+            </table>
+            <details>
+              <summary>Reglas de corrección</summary>
+              <ul>
+                <li><strong>Completitud</strong>: la unión/recomposición recupera todos los datos.</li>
+                <li><strong>Disyunción</strong> (horizontal): fragmentos sin traslape.</li>
+                <li><strong>Reconstrucción</strong>: existe operación inversa exacta.</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card">
+            <h3>Asignación y replicación</h3>
+            <ul>
+              <li><strong>Sin réplica</strong>: un fragmento vive en un solo sitio.</li>
+              <li><strong>Réplica completa</strong>: una copia por sitio (máxima disponibilidad, mayor costo de actualización).</li>
+              <li><strong>Réplica parcial</strong>: copias en subconjuntos de sitios (equilibrio).</li>
+              <li><strong>Sincrónica vs. asincrónica</strong> en la propagación de cambios.</li>
+            </ul>
+            <div class="note">Criterios de decisión: patrón de consultas/escrituras, latencias de red, SLAs de consistencia y disponibilidad, costos.</div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <h3>Ejemplo de diseño</h3>
+<pre><code>// Relación Clientes fragmentada horizontalmente por estado
+C_Noreste  = σ estado IN ('TAM','NL','COA') (Clientes)
+C_Centro   = σ estado IN ('CDMX','MEX','HGO','QRO') (Clientes)
+
+// Relación Pedidos fragmentada por año y replicada en S1 y S2
+P_2024@S1, P_2024@S2  // réplica parcial para analítica y resiliencia
+
+// Vertical: Datos sensibles por separado (incluye clave)
+Clientes_pub(id, nombre, estado)
+Clientes_priv(id, rfc, telefono)
+</code></pre>
+            <p>El <strong>catálogo global</strong> mantiene metadatos: predicados, ubicaciones, réplicas y estadísticas para el optimizador.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Actualizaciones -->
+  <section id="actualizaciones">
+    <div class="wrap">
+      <h2>3. Procesamiento de operaciones de actualización distribuidas</h2>
+      <div class="grid">
+        <div class="col-6">
+          <div class="card">
+            <h3>Estrategias de escritura</h3>
+            <ul>
+              <li><strong>Primary‑copy</strong>: todas las escrituras pasan por un primario; réplicas se actualizan desde ahí.</li>
+              <li><strong>Quórums</strong> (R/W): requiere <code>W</code> confirmaciones para escribir y <code>R</code> para leer; garantiza intersección de quórums.</li>
+              <li><strong>Remote‑write</strong>: el cliente escribe directamente en el sitio que aloja el fragmento.</li>
+              <li><strong>Sincrónica vs. eventual</strong>: trade‑off entre latencia y consistencia.</li>
+            </ul>
+            <div class="note warn">Con replicación sincrónica, la latencia de una actualización = latencia del sitio más lento + protocolo de compromiso.</div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="card">
+            <h3>Protocolo 2PC (Two‑Phase Commit)</h3>
+<pre><code>COORDINADOR
+1. &lt;prepare T&gt;  -- pregunta a participantes
+2. Si todos VOTE_COMMIT =&gt; &lt;global_commit&gt;
+   Si alguno VOTE_ABORT  =&gt; &lt;global_abort&gt;
+
+PARTICIPANTE
+1. Al recibir &lt;prepare&gt;: fuerza a log su decisión
+2. Responde VOTE_COMMIT si puede confirmar; de lo contrario VOTE_ABORT
+3. Espera orden global (&lt;commit/abort&gt;) y la registra (WAL)
+</code></pre>
+            <p>Permite <strong>atomicidad</strong> entre sitios. 3PC añade un paso para evitar bloqueos en ciertas fallas pero es menos común.</p>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <h3>Conflictos y recuperación</h3>
+            <ul>
+              <li><strong>Control de concurrencia</strong>: ver sección de transacciones (2PL, timestamps, MVCC).</li>
+              <li><strong>Resolución de conflictos</strong> (asincrónica): última‑escritura‑gana, relojes lógicos/vectoriales, CRDTs.</li>
+              <li><strong>Recuperación</strong>: <em>Write‑Ahead Logging</em> (REDO/UNDO), checkpoints, re‑elección de primarios, re‑sync de réplicas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Consultas -->
+  <section id="consultas">
+    <div class="wrap">
+      <h2>4. Procesamiento de consultas distribuidas</h2>
+      <div class="grid">
+        <div class="col-8">
+          <div class="card">
+            <h3>Etapas del optimizador distribuido</h3>
+            <ol>
+              <li><strong>Localización</strong>: usar el catálogo para hallar fragmentos y réplicas relevantes.</li>
+              <li><strong>Reescritura</strong>: empujar <em>selects</em>/proyecciones a los sitios de origen; eliminar fragmentos irrelevantes por predicados.</li>
+              <li><strong>Planificación</strong>: elegir <em>join order</em>, operadores (hash/nested loop) y ubicación de cada operador.</li>
+              <li><strong>Minimización de tráfico</strong>: técnicas como <strong>semijoin</strong>, agregación parcial y compresión.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card">
+            <h3>Semijoin (idea)</h3>
+<pre><code>// En S1 (Clientes): envia claves candidatas a S2
+π id (σ estado='TAM' Clientes)  -- pequeño
+
+// En S2 (Pedidos): filtra con claves y retorna solo relevantes
+π cliente_id,total (Pedidos ⋉ ids)
+
+// En S1: realiza join final con menos datos
+Clientes_TAM ⋈ Pedidos_filtrados
+</code></pre>
+            <p>Reduce drásticamente datos en tránsito cuando una tabla es grande.</p>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card">
+            <h3>Modelo de costo simplificado</h3>
+            <ul>
+              <li><strong>Tiempo total ≈</strong> costo CPU/E/S local + <strong>costo de comunicación</strong> (latencia fija + bytes/throughput).</li>
+              <li>Con redes de alta latencia, priorizar planes que <em>eviten mover datos</em> (push‑down, semijoin, agregación local).</li>
+              <li>Usar <strong>estadísticas</strong> de cardinalidad y selectividad actualizadas en el catálogo.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Transacciones -->
+  <section id="transacciones">
+    <div class="wrap">
+      <h2>5. Manejo de transacciones</h2>
+      <div class="grid">
+        <div class="col-6"><div class="card">
+          <h3>ACID distribuido</h3>
+          <ul>
+            <li><strong>Atomicidad</strong>: todo o nada en todos los sitios (2PC).</li>
+            <li><strong>Consistencia</strong>: invariantes globales preservadas.</li>
+            <li><strong>Aislamiento</strong>: serialización aparente (2PL), o niveles controlados (read committed, snapshot).</li>
+            <li><strong>Durabilidad</strong>: confirmaciones persistentes con WAL y réplicas.</li>
+          </ul>
+          <h3>Concurrencia</h3>
+          <ul>
+            <li><strong>2PL (Two‑Phase Locking)</strong>: crece con bloqueos, luego libera. Puede requerir <em>deadlock detection</em> distribuido.</li>
+            <li><strong>Ordenamiento por marcas de tiempo</strong>: rechaza operaciones que violan el orden temporal.</li>
+            <li><strong>MVCC</strong>: lecturas de <em>snapshot</em> reducen contención; coordinar escrituras.</li>
+          </ul>
+        </div></div>
+        <div class="col-6"><div class="card">
+          <h3>Deadlocks y fallos</h3>
+          <ul>
+            <li><strong>Detección</strong>: grafo de espera global; timeouts como respaldo.</li>
+            <li><strong>Recuperación</strong>: abortar víctima con menor costo; <em>replay</em> tras reinicio usando logs.</li>
+            <li><strong>Particiones de red</strong>: degradar a consistencia eventual/solo‑lectura o usar consenso (Paxos/Raft) para elegir líderes.</li>
+          </ul>
+          <table>
+            <thead><tr><th>Técnica</th><th>Pros</th><th>Contras</th></tr></thead>
+            <tbody>
+              <tr><td>2PL estricto</td><td>Alta consistencia</td><td>Bloqueos, riesgo de interbloqueo</td></tr>
+              <tr><td>MVCC + 2PC</td><td>Lecturas rápidas</td><td>GC de versiones, write‑skew</td></tr>
+              <tr><td>Quórums</td><td>Escala y disponibilidad</td><td>Lecturas/escrituras más lentas con quórums altos</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+        <div class="col-12"><div class="card">
+          <h3>Mini‑ejemplo de transacción global</h3>
+<pre><code>// Transferencia entre cuentas en S1 y S2
+BEGIN TRAN T;
+UPDATE Cuentas@S1 SET saldo = saldo - 500 WHERE id = 10;
+UPDATE Cuentas@S2 SET saldo = saldo + 500 WHERE id = 77;
+COMMIT;  -- coordinador ejecuta 2PC con ambos sitios
+</code></pre>
+          <p>Si cualquiera falla antes del <em>commit</em> global, el coordinador ordena <strong>ABORT</strong> para mantener atomicidad.</p>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reflexión personal -->
+  <section id="reflexion">
+    <div class="wrap">
+      <h2>Reflexión personal</h2>
+      <div class="card">
+        <p><em>¿Qué aprendí?</em> Comprendí cómo la distribución física complica, pero también potencia, el rendimiento y la disponibilidad. El diseño (fragmentación/replicación) afecta directamente la ejecución de consultas y el costo de las actualizaciones. Me quedó claro el papel del 2PC para mantener atomicidad entre sitios y cómo técnicas como semijoin reducen tráfico.</p>
+        <p><em>¿Qué fue lo más retador?</em> Visualizar los <strong>trade‑offs</strong> entre consistencia fuerte y disponibilidad al enfrentar fallos de red. También, entender cuándo conviene réplica sincrónica vs. asincrónica según los SLAs.</p>
+        <p><em>¿Cómo lo aplicaría?</em> Para un sistema con alta lectura geográfica, usaría fragmentación horizontal por región y réplica parcial; para operaciones financieras críticas, preferiría consistencia fuerte con 2PC y quórums que garanticen intersección.</p>
+        <p style="color:var(--muted)">Nota: puedes editar este texto con tus propias conclusiones antes de publicar.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Hecho con ❤️ para fines académicos. Este cuaderno es una SPA estática lista para Vercel.
+  </footer>
+
+  <script>
+    // Fecha automática
+    document.getElementById('today').textContent = new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+
+    // Tema claro/oscuro
+    const toggle = document.getElementById('toggleTheme');
+    let dark = true;
+    toggle?.addEventListener('click',()=>{
+      dark = !dark;
+      document.documentElement.style.filter = dark? 'none':'invert(1) hue-rotate(180deg)';
+      toggle.textContent = dark? 'Modo claro/oscuro':'Modo claro/oscuro';
+    });
+  </script>
+</body>
+</html>

@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="btnBar" role="group" aria-label="acciones rápidas">
-        <button class="btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+       
         <button class="btn" id="toggleTheme">Modo claro/oscuro</button>
       </div>
     </div>
@@ -403,16 +403,12 @@ COMMIT;  -- coordinador ejecuta 2PC con ambos sitios
       <h2>Reflexión personal</h2>
       <div class="card">
         <p><em>¿Qué aprendí?</em> Comprendí cómo la distribución física complica, pero también potencia, el rendimiento y la disponibilidad. El diseño (fragmentación/replicación) afecta directamente la ejecución de consultas y el costo de las actualizaciones. Me quedó claro el papel del 2PC para mantener atomicidad entre sitios y cómo técnicas como semijoin reducen tráfico.</p>
-        <p><em>¿Qué fue lo más retador?</em> Visualizar los <strong>trade‑offs</strong> entre consistencia fuerte y disponibilidad al enfrentar fallos de red. También, entender cuándo conviene réplica sincrónica vs. asincrónica según los SLAs.</p>
-        <p><em>¿Cómo lo aplicaría?</em> Para un sistema con alta lectura geográfica, usaría fragmentación horizontal por región y réplica parcial; para operaciones financieras críticas, preferiría consistencia fuerte con 2PC y quórums que garanticen intersección.</p>
-        <p style="color:var(--muted)">Nota: puedes editar este texto con tus propias conclusiones antes de publicar.</p>
+        
       </div>
     </div>
   </section>
 
-  <footer>
-    Hecho con ❤️ para fines académicos. Este cuaderno es una SPA estática lista para Vercel.
-  </footer>
+  
 
   <script>
     // Fecha automática

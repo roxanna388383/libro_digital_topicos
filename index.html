@@ -1,425 +1,928 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cuaderno Digital | Sistemas de Bases de Datos Distribuidas</title>
-  <meta name="description" content="Cuaderno Digital de la Unidad 1: Sistemas de Bases de Datos Distribuidas. Incluye portada, secciones temáticas (conceptos, diseño, procesamiento de actualizaciones, consultas y transacciones) y reflexión personal." />
-  <style>
-    :root{
-      --bg: #0f172a;          /* slate-900 */
-      --panel:#111827;        /* gray-900 */
-      --ink:#e5e7eb;          /* gray-200 */
-      --muted:#94a3b8;        /* slate-400 */
-      --brand:#06b6d4;        /* cyan-500 */
-      --accent:#22c55e;       /* green-500 */
-      --warn:#f59e0b;         /* amber-500 */
-      --danger:#ef4444;       /* red-500 */
-      --card:#0b1022;
-      --line:#1f2937;         /* gray-800 */
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:linear-gradient(180deg, #0b1022, #0f172a 40%);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";line-height:1.65}
-    a{color:var(--brand);text-decoration:none} a:hover{text-decoration:underline}
-    header{position:sticky;top:0;background:rgba(11,16,34,.8);backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);z-index:20}
-    .wrap{max-width:1100px;margin:0 auto;padding:14px 18px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:34px;height:34px;border-radius:10px;background:conic-gradient(from 210deg,#22d3ee,#60a5fa,#a78bfa,#22d3ee);box-shadow:0 0 24px #22d3ee33}
-    nav{display:flex;gap:16px;flex-wrap:wrap}
-    .top{display:flex;justify-content:space-between;align-items:center}
-    .btn{background:#0b132b;border:1px solid var(--line);color:var(--ink);padding:8px 12px;border-radius:12px;cursor:pointer}
-    .btn:hover{border-color:#2dd4bf}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Cuaderno Digital - BDOO ✨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Pacifico&display=swap');
 
-    .hero{padding:60px 18px 36px;background:radial-gradient(1200px 400px at 50% -10%, #1f2937 0%, transparent 60%)}
-    .hero .card{background:linear-gradient(180deg,#0b132b,#0b1022);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;grid-template-columns:1.2fr .8fr;gap:22px}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:.9rem}
-    .title{font-size:clamp(26px,4vw,40px);line-height:1.15;margin:.4rem 0 1rem}
-    .subtitle{color:var(--muted)}
-    .meta{margin:20px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .meta div{border:1px dashed #233046;padding:10px;border-radius:12px}
-    .coverVisual{min-height:240px;border:1px solid var(--line);border-radius:16px;position:relative;background:radial-gradient(450px 220px at 20% 10%,#0ea5e9 0%,transparent 55%), radial-gradient(450px 220px at 80% 90%,#22c55e 0%,transparent 55%), linear-gradient(180deg,#0b1022,#0b132b)}
-    .coverVisual::after{content:"BDD";position:absolute;inset:auto 16px 12px auto;font-weight:700;color:#93c5fd33;font-size:96px;letter-spacing:.12em}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    section{padding:26px 18px;border-top:1px solid var(--line)}
-    h2{font-size:clamp(22px,3vw,32px);margin:0 0 10px}
-    h3{font-size:clamp(18px,2.2vw,22px);margin:18px 0 8px}
-    p{margin:.4rem 0}
-    .card{background:linear-gradient(180deg,#0b132b,#0b1022);border:1px solid var(--line);border-radius:16px;padding:18px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .col-6{grid-column:span 6}
-    .col-4{grid-column:span 4}
-    .col-8{grid-column:span 8}
-    .col-12{grid-column:span 12}
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 50%, #ffecd2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
 
-    ul{margin:.3rem 0 .2rem 1.1rem}
-    li{margin:.2rem 0}
-    code,.code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;background:#0a0f22;border:1px solid #1e293b;padding:.15rem .35rem;border-radius:6px}
-    pre{background:#0a0f22;border:1px solid #1e293b;border-radius:12px;padding:12px;overflow:auto}
+        body::before {
+            content: '✨';
+            position: fixed;
+            top: 10%;
+            left: 5%;
+            font-size: 2em;
+            animation: float 3s ease-in-out infinite;
+        }
 
-    details{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:linear-gradient(180deg,#0b1026,#0b1022)}
-    details+details{margin-top:10px}
-    details summary{cursor:pointer;color:#cbd5e1;font-weight:600}
+        body::after {
+            content: '🌸';
+            position: fixed;
+            bottom: 10%;
+            right: 5%;
+            font-size: 2em;
+            animation: float 4s ease-in-out infinite;
+        }
 
-    table{width:100%;border-collapse:collapse;margin:.4rem 0;border:1px solid var(--line)}
-    th,td{border:1px solid var(--line);padding:.6rem;text-align:left}
-    th{background:#0e1630}
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
 
-    .toc{display:flex;flex-wrap:wrap;gap:8px}
-    .toc a{border:1px solid var(--line);padding:6px 10px;border-radius:10px;color:#cbd5e1}
-    .toc a:hover{border-color:#60a5fa}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(252, 182, 159, 0.4);
+            overflow: hidden;
+            border: 3px solid #ffb6c1;
+        }
 
-    .note{border-left:4px solid var(--brand);padding:.6rem .8rem;background:#0b132b;border-radius:8px}
-    .ok{border-left-color:var(--accent)}
-    .warn{border-left-color:var(--warn)}
+        .header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+            color: #fff;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid #ffb6c1;
+        }
 
-    footer{padding:40px 18px;color:#9ca3af;text-align:center}
+        .header::before {
+            content: '💖';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2em;
+        }
 
-    /* Print/PDF */
-    @media print{
-      header,.btnBar,.coverVisual::after{display:none!important}
-      body{background:#fff;color:#111}
-      section, .hero{page-break-inside:avoid}
-      .card, .pill{border-color:#999}
-      a{color:#111}
-    }
-  </style>
+        .header::after {
+            content: '💖';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+        }
+
+        .header h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            color: #fff;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .nav {
+            background: linear-gradient(to right, #fff5f7, #ffe6f0, #fff5f7);
+            padding: 25px;
+            border-bottom: 4px solid #ffc0cb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border: 3px solid #ffb6c1;
+            border-radius: 30px;
+            color: #d63384;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95em;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: white;
+            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.6);
+        }
+
+        .content {
+            padding: 50px;
+            background: linear-gradient(to bottom, #fff, #fff5f7);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.6s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+
+        .section h2 {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.3em;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #ffb6c1;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .section h2::before {
+            content: '🌺';
+            margin-right: 10px;
+        }
+
+        .section h3 {
+            color: #d63384;
+            font-size: 1.7em;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section h3::before {
+            content: '💕';
+            position: absolute;
+            left: -10px;
+        }
+
+        .section h4 {
+            color: #ff69b4;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .section p {
+            line-height: 1.9;
+            color: #4a4a4a;
+            margin-bottom: 18px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+
+        .section ul, .section ol {
+            margin-left: 35px;
+            margin-bottom: 18px;
+            line-height: 2;
+        }
+
+        .section li {
+            margin-bottom: 12px;
+            color: #4a4a4a;
+            font-size: 1.05em;
+        }
+
+        .section li::marker {
+            color: #ff9a9e;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #fff5f7, #ffe6f0);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 25px 0;
+            border: 3px solid #ffc0cb;
+            box-shadow: 0 8px 20px rgba(255, 192, 203, 0.3);
+            position: relative;
+        }
+
+        .card::before {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #fff9e6, #ffe8cc);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        td {
+            padding: 15px 18px;
+            border-bottom: 2px solid #ffe6f0;
+        }
+
+        tr:hover {
+            background: #fff5f7;
+        }
+
+        .code-block {
+            background: linear-gradient(135deg, #3d3d3d, #2d2d2d);
+            color: #ffb6c1;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            border: 3px solid #ff9a9e;
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.3);
+        }
+
+        strong {
+            color: #d63384;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .content {
+                padding: 25px;
+            }
+            .nav-buttons {
+                flex-direction: column;
+            }
+            body::before,
+            body::after {
+                display: none;
+            }
+        }
+
+        .decorative-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5em;
+            opacity: 0.3;
+            animation: heartFloat 15s infinite;
+        }
+
+        @keyframes heartFloat {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 30%; animation-delay: 3s; }
+        .heart:nth-child(3) { left: 50%; animation-delay: 6s; }
+        .heart:nth-child(4) { left: 70%; animation-delay: 9s; }
+        .heart:nth-child(5) { left: 90%; animation-delay: 12s; }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="wrap top">
-      <div class="brand"><div class="logo" aria-hidden="true"></div>
-        <div>
-          <strong>Cuaderno Digital</strong><div style="font-size:.9rem;color:var(--muted)">Unidad 1 • Bases de Datos Distribuidas</div>
-        </div>
-      </div>
-      <div class="btnBar" role="group" aria-label="acciones rápidas">
-       
-        <button class="btn" id="toggleTheme">Modo claro/oscuro</button>
-      </div>
+    <div class="decorative-hearts">
+        <div class="heart">💗</div>
+        <div class="heart">🌸</div>
+        <div class="heart">✨</div>
+        <div class="heart">💖</div>
+        <div class="heart">🌺</div>
     </div>
-  </header>
 
-  <!-- Portada -->
-  <div class="hero">
-    <div class="wrap">
-      <div class="card">
-        <div>
-          <span class="pill">Páginas de presentación</span>
-          <h1 class="title">Sistemas de Bases de Datos Distribuidas</h1>
-          <p class="subtitle">Cuaderno digital que cubre los temas de la Unidad 1: conceptos, diseño, procesamiento de actualizaciones y consultas, y manejo de transacciones.</p>
-          <div class="meta">
-            <div>
-              <strong>Estudiante:</strong> Roxana Guzmán<br/>
-              <strong>Programa:</strong> Ingeniería Informática
+    <div class="container">
+        <div class="header">
+            <h1>Mi Cuaderno Digital ✨</h1>
+            <p>Bases de Datos Orientadas a Objetos</p>
+        </div>
+
+        <nav class="nav">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('intro')">✨ Introducción</button>
+                <button class="nav-btn" onclick="showSection('modelo')">💕 2.1 Modelo OO</button>
+                <button class="nav-btn" onclick="showSection('odmg')">🌸 2.2 Estándar ODMG</button>
+                <button class="nav-btn" onclick="showSection('identidad')">💖 2.3 Identidad</button>
+                <button class="nav-btn" onclick="showSection('encapsulamiento')">🌺 2.4 Encapsulamiento</button>
+                <button class="nav-btn" onclick="showSection('persistencia')">✨ 2.5 Persistencia</button>
             </div>
-            <div>
-              <strong>Asignatura:</strong> Bases de Datos Distribuidas<br/>
-              <strong>Fecha:</strong> <span id="today"></span>
-            </div>
-            <div>
-              <strong>Institución:</strong> Instituto Tecnológico Superior de Pánuco
-            </div>
-            
-          </div>
-          <div class="note ok">Propósito de la unidad: comprender los principios, el diseño y la operación de una base de datos distribuida para construir soluciones escalables, tolerantes a fallos y con buen rendimiento.</div>
+        </nav>
+
+        <div class="content">
+            <!-- Sección Introducción -->
+            <section id="intro" class="section active">
+                <h2>Sistemas de Bases de Datos Orientadas a Objetos</h2>
+                
+                <div class="card">
+                    <h3>¿Qué son las BDOO?</h3>
+                    <p>Las Bases de Datos Orientadas a Objetos (BDOO) son sistemas de gestión de bases de datos que integran conceptos de la programación orientada a objetos con las capacidades de gestión de datos persistentes. Permiten almacenar objetos complejos directamente sin necesidad de descomponerlos en tablas relacionales.</p>
+                </div>
+
+                <h3>Ventajas de las BDOO</h3>
+                <ul>
+                    <li><strong>Modelado Natural:</strong> Representan el mundo real de forma más intuitiva</li>
+                    <li><strong>Reutilización:</strong> Herencia y polimorfismo facilitan la reutilización de código</li>
+                    <li><strong>Objetos Complejos:</strong> Manejo eficiente de datos multimedia, gráficos y estructuras complejas</li>
+                    <li><strong>Integridad:</strong> Encapsulamiento protege la consistencia de datos</li>
+                    <li><strong>Performance:</strong> Mejor rendimiento para aplicaciones complejas</li>
+                </ul>
+
+                <h3>Desventajas</h3>
+                <ul>
+                    <li>Menor madurez comparado con sistemas relacionales</li>
+                    <li>Falta de estándares universales</li>
+                    <li>Curva de aprendizaje más pronunciada</li>
+                    <li>Menor cantidad de herramientas disponibles</li>
+                </ul>
+            </section>
+
+            <!-- Sección 2.1 -->
+            <section id="modelo" class="section">
+                <h2>2.1 El Modelo de Datos Orientado a Objetos</h2>
+
+                <h3>2.1.1 Características de los SGBDOO</h3>
+                
+                <div class="card">
+                    <h4>Características Fundamentales</h4>
+                    <ol>
+                        <li><strong>Objetos:</strong> Unidad básica que combina datos y comportamiento</li>
+                        <li><strong>Identidad de Objeto (OID):</strong> Cada objeto tiene un identificador único e inmutable</li>
+                        <li><strong>Encapsulamiento:</strong> Ocultamiento de la implementación interna</li>
+                        <li><strong>Clases:</strong> Plantillas que definen estructura y comportamiento</li>
+                        <li><strong>Herencia:</strong> Mecanismo para crear jerarquías de clases</li>
+                        <li><strong>Polimorfismo:</strong> Capacidad de objetos de diferentes clases de responder a la misma operación</li>
+                        <li><strong>Tipos Complejos:</strong> Soporte para tipos de datos estructurados</li>
+                        <li><strong>Persistencia:</strong> Almacenamiento permanente de objetos</li>
+                    </ol>
+                </div>
+
+                <div class="highlight">
+                    <strong>📌 Nota Importante:</strong> A diferencia de las bases de datos relacionales que utilizan llaves primarias, las BDOO usan OID (Object Identifier) para identificar objetos de manera única.
+                </div>
+
+                <h3>2.1.2 Tipos de SGBDOO</h3>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>BDOO Puros</strong></td>
+                                <td>Sistemas completamente orientados a objetos desde su diseño</td>
+                                <td>Gemstone, ObjectStore</td>
+                            </tr>
+                            <tr>
+                                <td><strong>BDOO Extendidas</strong></td>
+                                <td>BD relacionales con extensiones orientadas a objetos</td>
+                                <td>PostgreSQL, Oracle Object</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Híbridas (OR)</strong></td>
+                                <td>Combinan modelo relacional con características OO</td>
+                                <td>Oracle, DB2, SQL Server</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>2.1.3 Productos Principales</h3>
+
+                <div class="card">
+                    <h4>Productos Comerciales</h4>
+                    <ul>
+                        <li><strong>ObjectDB:</strong> BDOO puro para Java con alto rendimiento</li>
+                        <li><strong>Versant Object Database:</strong> BDOO para aplicaciones de misión crítica</li>
+                        <li><strong>Oracle Database:</strong> Soporte objeto-relacional robusto</li>
+                        <li><strong>PostgreSQL:</strong> BDOO de código abierto con características avanzadas</li>
+                        <li><strong>InterSystems Caché:</strong> Post-relacional con modelo de objetos</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Productos Open Source</h4>
+                    <ul>
+                        <li><strong>db4o:</strong> BDOO embebida para .NET y Java</li>
+                        <li><strong>NeoDatis ODB:</strong> BDOO ligera para Java</li>
+                        <li><strong>ZODB:</strong> BDOO nativa para Python</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Sección 2.2 -->
+            <section id="odmg" class="section">
+                <h2>2.2 El Estándar ODMG</h2>
+
+                <div class="card">
+                    <h3>¿Qué es ODMG?</h3>
+                    <p><strong>ODMG (Object Data Management Group)</strong> fue un consorcio que desarrolló un estándar para bases de datos orientadas a objetos. Aunque el grupo se disolvió en 2001, su estándar ODMG 3.0 sigue siendo referencia importante.</p>
+                </div>
+
+                <h3>Componentes del Estándar ODMG</h3>
+
+                <div class="card">
+                    <h4>1. Modelo de Objetos</h4>
+                    <p>Define conceptos fundamentales: objetos, literales, propiedades, operaciones, excepciones, relaciones y tipos.</p>
+                    
+                    <h4>2. ODL (Object Definition Language)</h4>
+                    <p>Lenguaje de definición de esquemas orientado a objetos. Similar a IDL de CORBA.</p>
+                    
+                    <div class="code-block">class Persona {
+    attribute string nombre;
+    attribute int edad;
+    attribute Date fechaNacimiento;
+    relationship Set&lt;Curso&gt; cursosMatriculados;
+    
+    void cumplirAnios();
+    int calcularEdad();
+}</div>
+                </div>
+
+                <div class="card">
+                    <h4>3. OQL (Object Query Language)</h4>
+                    <p>Lenguaje de consulta declarativo basado en SQL pero adaptado a objetos.</p>
+                    
+                    <div class="code-block">SELECT e.nombre, e.salario
+FROM empleados e
+WHERE e.departamento.nombre = "Ventas" 
+  AND e.salario > 50000
+ORDER BY e.salario DESC</div>
+                </div>
+
+                <div class="card">
+                    <h4>4. Enlaces a Lenguajes de Programación</h4>
+                    <p>Define interfaces para C++, Java y Smalltalk, permitiendo manipular objetos persistentes directamente desde estos lenguajes.</p>
+                </div>
+
+                <h3>Características Principales de ODMG</h3>
+                <ul>
+                    <li><strong>Transparencia de persistencia:</strong> Objetos transitorios y persistentes se manejan igual</li>
+                    <li><strong>Transacciones ACID:</strong> Garantiza atomicidad, consistencia, aislamiento y durabilidad</li>
+                    <li><strong>Navegación por referencias:</strong> Acceso eficiente a objetos relacionados</li>
+                    <li><strong>Colecciones:</strong> Set, Bag, List, Array para agrupar objetos</li>
+                    <li><strong>Relaciones bidireccionales:</strong> Mantenimiento automático de integridad referencial</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>💡 Dato Curioso:</strong> Aunque ODMG ya no está activo, sus conceptos influenciaron estándares modernos como JPA (Java Persistence API) y JDO (Java Data Objects).
+                </div>
+            </section>
+
+            <!-- Sección 2.3 -->
+            <section id="identidad" class="section">
+                <h2>2.3 Identidad y Estructura de Objetos</h2>
+
+                <h3>Identidad de Objetos (OID)</h3>
+                
+                <div class="card">
+                    <p>La <strong>identidad de objeto</strong> es una característica fundamental que distingue las BDOO de otros modelos. Cada objeto tiene un identificador único (OID) que:</p>
+                    <ul>
+                        <li>Es asignado por el sistema al crear el objeto</li>
+                        <li>Permanece inmutable durante toda la vida del objeto</li>
+                        <li>Es independiente del contenido del objeto</li>
+                        <li>No puede ser modificado por el usuario</li>
+                        <li>Se utiliza para referenciar objetos</li>
+                    </ul>
+                </div>
+
+                <h3>Diferencia entre Identidad, Igualdad y Equivalencia</h3>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Descripción</th>
+                                <th>Operador</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Identidad</strong></td>
+                                <td>Dos referencias apuntan al mismo objeto (mismo OID)</td>
+                                <td>obj1 === obj2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Igualdad Superficial</strong></td>
+                                <td>Los atributos directos tienen los mismos valores</td>
+                                <td>obj1 == obj2</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Igualdad Profunda</strong></td>
+                                <td>Todos los atributos, incluyendo objetos referenciados, son iguales</td>
+                                <td>obj1.deepEquals(obj2)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Estructura de Objetos</h3>
+
+                <div class="card">
+                    <h4>Componentes de un Objeto</h4>
+                    <ol>
+                        <li><strong>OID:</strong> Identificador único del objeto</li>
+                        <li><strong>Estado:</strong> Valores de los atributos del objeto</li>
+                        <li><strong>Comportamiento:</strong> Métodos que puede ejecutar</li>
+                        <li><strong>Referencias:</strong> Enlaces a otros objetos</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h4>Tipos de Estructuras</h4>
+                    
+                    <p><strong>Objetos Simples:</strong> Contienen atributos de tipos primitivos</p>
+                    <div class="code-block">class Punto {
+    int x;
+    int y;
+}</div>
+
+                    <p><strong>Objetos Complejos:</strong> Contienen referencias a otros objetos</p>
+                    <div class="code-block">class Empleado {
+    string nombre;
+    Departamento departamento;  // Referencia a objeto
+    Set&lt;Proyecto&gt; proyectos;    // Colección de objetos
+}</div>
+
+                    <p><strong>Objetos Compuestos:</strong> Objetos que contienen otros objetos como parte integral</p>
+                </div>
+
+                <h3>Referencias y Compartición de Objetos</h3>
+                <p>En BDOO, múltiples objetos pueden referenciar al mismo objeto mediante su OID. Esto permite:</p>
+                <ul>
+                    <li>Representar relaciones muchos-a-muchos naturalmente</li>
+                    <li>Evitar duplicación de datos</li>
+                    <li>Mantener consistencia automáticamente</li>
+                    <li>Navegar eficientemente entre objetos relacionados</li>
+                </ul>
+            </section>
+
+            <!-- Sección 2.4 -->
+            <section id="encapsulamiento" class="section">
+                <h2>2.4 Encapsulamiento, Herencia y Polimorfismo en BDOO</h2>
+
+                <h3>Encapsulamiento</h3>
+                
+                <div class="card">
+                    <p>El <strong>encapsulamiento</strong> es el mecanismo de ocultar los detalles de implementación interna de un objeto, exponiendo solo una interfaz pública bien definida.</p>
+                    
+                    <h4>Beneficios del Encapsulamiento</h4>
+                    <ul>
+                        <li><strong>Abstracción:</strong> Separación entre interfaz e implementación</li>
+                        <li><strong>Protección de datos:</strong> Control de acceso a atributos internos</li>
+                        <li><strong>Mantenibilidad:</strong> Cambios internos no afectan código externo</li>
+                        <li><strong>Integridad:</strong> Validaciones en métodos de acceso</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Niveles de Visibilidad</h4>
+                    <div class="code-block">class CuentaBancaria {
+    private double saldo;          // Solo accesible dentro de la clase
+    protected string titular;       // Accesible en subclases
+    public string numeroCuenta;     // Accesible desde cualquier lugar
+    
+    public void depositar(double monto) {
+        if (monto > 0) {
+            this.saldo += monto;
+        }
+    }
+    
+    public double consultarSaldo() {
+        return this.saldo;
+    }
+}</div>
+                </div>
+
+                <h3>Herencia</h3>
+
+                <div class="card">
+                    <p>La <strong>herencia</strong> permite crear nuevas clases (subclases) basadas en clases existentes (superclases), heredando sus atributos y métodos.</p>
+                    
+                    <h4>Tipos de Herencia</h4>
+                    
+                    <p><strong>1. Herencia Simple:</strong> Una clase hereda de una sola superclase</p>
+                    <div class="code-block">class Empleado extends Persona {
+    double salario;
+    string numeroEmpleado;
+    
+    void trabajar() { ... }
+}</div>
+
+                    <p><strong>2. Herencia Múltiple:</strong> Una clase hereda de múltiples superclases (no soportada en todos los SGBD)</p>
+                    <div class="code-block">class Estudiante-Empleado extends Estudiante, Empleado {
+    // Hereda de ambas clases
+}</div>
+
+                    <p><strong>3. Herencia Multinivel:</strong> Jerarquías de herencia en varios niveles</p>
+                    <div class="code-block">Persona → Empleado → Gerente → Director</div>
+                </div>
+
+                <div class="highlight">
+                    <strong>⚠️ Importante:</strong> La herencia debe usarse cuidadosamente. No es una simple forma de reutilizar código, sino que debe representar una relación "es-un" genuina.
+                </div>
+
+                <h3>Polimorfismo</h3>
+
+                <div class="card">
+                    <p>El <strong>polimorfismo</strong> permite que objetos de diferentes clases respondan a la misma operación de manera específica a su tipo.</p>
+                    
+                    <h4>Tipos de Polimorfismo</h4>
+                    
+                    <p><strong>1. Polimorfismo de Sobrecarga:</strong> Múltiples métodos con el mismo nombre pero diferentes parámetros</p>
+                    <div class="code-block">class Calculadora {
+    int sumar(int a, int b) { return a + b; }
+    double sumar(double a, double b) { return a + b; }
+    int sumar(int a, int b, int c) { return a + b + c; }
+}</div>
+
+                    <p><strong>2. Polimorfismo de Sobreescritura:</strong> Subclases redefinen métodos heredados</p>
+                    <div class="code-block">class Figura {
+    virtual double calcularArea() { ... }
+}
+
+class Circulo extends Figura {
+    double radio;
+    
+    override double calcularArea() {
+        return Math.PI * radio * radio;
+    }
+}
+
+class Rectangulo extends Figura {
+    double base, altura;
+    
+    override double calcularArea() {
+        return base * altura;
+    }
+}</div>
+
+                    <p><strong>3. Polimorfismo Paramétrico:</strong> Clases y métodos genéricos</p>
+                    <div class="code-block">class Lista&lt;T&gt; {
+    void agregar(T elemento) { ... }
+    T obtener(int indice) { ... }
+}</div>
+                </div>
+
+                <h3>Aplicación en BDOO</h3>
+                <p>Estos tres conceptos trabajan juntos en las BDOO para:</p>
+                <ul>
+                    <li>Modelar jerarquías complejas del mundo real</li>
+                    <li>Facilitar la extensibilidad del esquema de base de datos</li>
+                    <li>Permitir consultas polimórficas que operan sobre jerarquías de clases</li>
+                    <li>Mantener la integridad de datos mediante validaciones encapsuladas</li>
+                </ul>
+            </section>
+
+            <!-- Sección 2.5 -->
+            <section id="persistencia" class="section">
+                <h2>2.5 Persistencia, Concurrencia y Recuperación en BDOO</h2>
+
+                <h3>Persistencia de Objetos</h3>
+
+                <div class="card">
+                    <p>La <strong>persistencia</strong> es la capacidad de mantener objetos más allá de la ejecución del programa que los creó.</p>
+                    
+                    <h4>Mecanismos de Persistencia</h4>
+                    
+                    <p><strong>1. Persistencia por Alcance:</strong></p>
+                    <ul>
+                        <li>Objetos persistentes si son alcanzables desde objetos raíz persistentes</li>
+                        <li>Gestión automática de persistencia</li>
+                        <li>El programador no necesita marcar explícitamente cada objeto</li>
+                    </ul>
+
+                    <p><strong>2. Persistencia por Clase:</strong></p>
+                    <ul>
+                        <li>Todas las instancias de ciertas clases son automáticamente persistentes</li>
+                        <li>Se declara al definir la clase</li>
+                        <li>Ejemplo: <code>persistent class Empleado { ... }</code></li>
+                    </ul>
+
+                    <p><strong>3. Persistencia Explícita:</strong></p>
+                    <ul>
+                        <li>El programador marca explícitamente qué objetos deben persistir</li>
+                        <li>Mayor control pero más trabajo</li>
+                        <li>Ejemplo: <code>database.makePersistent(objeto);</code></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Ciclo de Vida de un Objeto Persistente</h4>
+                    <ol>
+                        <li><strong>Transitorio:</strong> Objeto recién creado en memoria</li>
+                        <li><strong>Persistente:</strong> Objeto almacenado en la base de datos</li>
+                        <li><strong>Persistente-Sucio:</strong> Objeto persistente modificado en memoria</li>
+                        <li><strong>Persistente-Limpio:</strong> Objeto persistente sin modificaciones</li>
+                        <li><strong>Borrado:</strong> Objeto marcado para eliminación</li>
+                    </ol>
+                </div>
+
+                <h3>Control de Concurrencia</h3>
+
+                <div class="card">
+                    <p>El <strong>control de concurrencia</strong> gestiona el acceso simultáneo de múltiples usuarios a los mismos objetos.</p>
+                    
+                    <h4>Técnicas de Control de Concurrencia</h4>
+                    
+                    <p><strong>1. Bloqueo (Locking):</strong></p>
+                    <ul>
+                        <li><strong>Bloqueo compartido (Read Lock):</strong> Múltiples lecturas simultáneas</li>
+                        <li><strong>Bloqueo exclusivo (Write Lock):</strong> Un solo usuario puede modificar</li>
+                        <li><strong>Bloqueo de granularidad variable:</strong> A nivel de objeto, clase o base de datos</li>
+                    </ul>
+
+                    <p><strong>2. Control de Concurrencia Optimista:</strong></p>
+                    <ul>
+                        <li>No bloquea objetos durante lectura</li>
+                        <li>Verifica conflictos al momento de commit</li>
+                        <li>Si hay conflicto, revierte la transacción</li>
+                        <li>Mejor para aplicaciones con baja probabilidad de conflictos</li>
+                    </ul>
+
+                    <p><strong>3. Control de Versiones:</strong></p>
+                    <ul>
+                        <li>Mantiene múltiples versiones de objetos</li>
+                        <li>Cada transacción trabaja con su propia versión</li>
+                        <li>Reconciliación de versiones al finalizar</li>
+                    </ul>
+                </div>
+
+                <div class="highlight">
+                    <strong>⚠️ Problema del Interbloqueo (Deadlock):</strong> Ocurre cuando dos o más transacciones se bloquean mutuamente esperando recursos. Las BDOO implementan algoritmos de detección y resolución de deadlocks.
+                </div>
+
+                <h3>Transacciones</h3>
+
+                <div class="card">
+                    <h4>Propiedades ACID</h4>
+                    <ul>
+                        <li><strong>Atomicidad:</strong> La transacción se ejecuta completamente o no se ejecuta</li>
+                        <li><strong>Consistencia:</strong> La transacción lleva la BD de un estado válido a otro válido</li>
+                        <li><strong>Aislamiento:</strong> Las transacciones concurrentes no se interfieren</li>
+                        <li><strong>Durabilidad:</strong> Los cambios confirmados persisten incluso ante fallos</li>
+                    </ul>
+
+                    <div class="code-block">// Ejemplo de transacción
+database.beginTransaction();
+try {
+    Cuenta c1 = database.getObject("cuenta1");
+    Cuenta c2 = database.getObject("cuenta2");
+    
+    c1.retirar(1000);
+    c2.depositar(1000);
+    
+    database.commit();  // Confirma cambios
+} catch (Exception e) {
+    database.rollback();  // Revierte cambios
+}</div>
+                </div>
+
+                <h3>Recuperación ante Fallos</h3>
+
+                <div class="card">
+                    <p>Los sistemas de <strong>recuperación</strong> garantizan que la base de datos pueda volver a un estado consistente después de un fallo.</p>
+                    
+                    <h4>Técnicas de Recuperación</h4>
+                    
+                    <p><strong>1. Registro de Operaciones (Log):</strong></p>
+                    <ul>
+                        <li>Registra todas las operaciones antes de ejecutarlas</li>
+                        <li>Permite deshacer (UNDO) o rehacer (REDO) operaciones</li>
+                        <li>Tipos: write-ahead logging, shadow paging</li>
+                    </ul>
+
+                    <p><strong>2. Puntos de Verificación (Checkpoints):</strong></p>
+                    <ul>
+                        <li>Guardan el estado completo de la BD periódicamente</li>
+                        <li>Reducen tiempo de recuperación</li>
+                        <li>La recuperación comienza desde el último checkpoint</li>
+                    </ul>
+
+                    <p><strong>3. Copias de Seguridad (Backups):</strong></p>
+                    <ul>
+                        <li>Completas: toda la base de datos</li>
+                        <li>Incrementales: solo cambios desde último backup</li>
+                        <li>Diferenciales: cambios desde último backup completo</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>Proceso de Recuperación</h4>
+                    <ol>
+                        <li>Detectar el tipo de fallo (sistema, medio, transacción)</li>
+                        <li>Identificar transacciones afectadas</li>
+                        <li>Deshacer transacciones no completadas (UNDO)</li>
+                        <li>Rehacer transacciones completadas pero no escritas (REDO)</li>
+                        <li>Restaurar estado consistente de la base de datos</li>
+                    </ol>
+                </div>
+
+                <h3>Características Especiales en BDOO</h3>
+                <ul>
+                    <li><strong>Persistencia transitiva:</strong> Al hacer persistente un objeto, todos los objetos referenciados también se hacen persistentes</li>
+                    <li><strong>Caché de objetos:</strong> Mejora rendimiento manteniendo objetos frecuentemente accedidos en memoria</li>
+                    <li><strong>Clúster de objetos:</strong> Agrupa objetos relacionados en disco para acceso eficiente</li>
+                    <li><strong>Recuperación de grafos de objetos:</strong> Restaura no solo objetos individuales sino sus relaciones</li>
+                </ul>
+            </section>
         </div>
-        <div class="coverVisual" aria-hidden="true"></div>
-      </div>
     </div>
-  </div>
 
-  <!-- Índice -->
-  <section>
-    <div class="wrap">
-      <h2>Índice (secciones temáticas)</h2>
-      <div class="toc">
-        <a href="#conceptos">1. Conceptos de bases de datos distribuidas</a>
-        <a href="#diseno">2. Diseño de bases de datos distribuidas</a>
-        <a href="#actualizaciones">3. Procesamiento de operaciones de actualización distribuidas</a>
-        <a href="#consultas">4. Procesamiento de consultas distribuidas</a>
-        <a href="#transacciones">5. Manejo de transacciones</a>
-        <a href="#reflexion">Reflexión personal</a>
-      </div>
-    </div>
-  </section>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
 
-  <!-- 1. Conceptos -->
-  <section id="conceptos">
-    <div class="wrap">
-      <h2>1. Conceptos de base de datos distribuidas</h2>
-      <div class="grid">
-        <div class="col-8">
-          <div class="card">
-            <h3>¿Qué es una BDD?</h3>
-            <p>Una <strong>base de datos distribuida (BDD)</strong> es un conjunto de datos lógicamente relacionados que se almacenan y procesan en múltiples nodos (sitios) interconectados por una red. El sistema debe brindar una <em>vista única</em> de los datos pese a su distribución física.</p>
-            <h3>Objetivos clave</h3>
-            <ul>
-              <li><strong>Escalabilidad</strong>: crecer en capacidad agregando nodos.</li>
-              <li><strong>Disponibilidad</strong> y <strong>tolerancia a fallos</strong>: seguir operando ante caídas parciales.</li>
-              <li><strong>Rendimiento</strong>: acercar los datos al lugar donde se consumen.</li>
-              <li><strong>Autonomía local</strong>: cada nodo administra sus recursos.</li>
-            </ul>
-            <h3>Transparencias (metas de diseño)</h3>
-            <ul>
-              <li><strong>Ubicación</strong>: el usuario no necesita saber en qué nodo están los datos.</li>
-              <li><strong>Fragmentación</strong> y <strong>replicación</strong>: acceso uniforme sin importar cómo se dividieron/duplicaron los datos.</li>
-              <li><strong>Concurrencia</strong> y <strong>fallos</strong>: las transacciones parecen seriales y atómicas aun con fallos.</li>
-              <li><strong>Heterogeneidad</strong>: interoperar entre distintos motores/formatos (cuando aplique).</li>
-            </ul>
-            <h3>Arquitecturas típicas</h3>
-            <ul>
-              <li><strong>Cliente/servidor</strong> (coordinador y varios servidores de datos).</li>
-              <li><strong>Peer‑to‑peer</strong> (nodos simétricos que comparten responsabilidades).</li>
-              <li><strong>Multimaestro</strong> (escrituras en múltiples réplicas con protocolos de consenso).</li>
-            </ul>
-            <h3>CAP (intuición)</h3>
-            <p>En presencia de particiones de red, un sistema distribuido debe elegir priorizar <strong>Consistencia</strong> o <strong>Disponibilidad</strong>, manteniendo siempre <strong>Tolerancia a particiones</strong>. Muchas BDD tradicionales priorizan consistencia fuerte; otras adoptan consistencia eventual para alta disponibilidad.</p>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card">
-            <h3>Ejemplo breve</h3>
-<pre><code>-- Consulta global (vista única)
-SELECT c.nombre, p.total
-FROM Clientes@S1 c
-JOIN Pedidos@S2 p ON p.cliente_id = c.id
-WHERE p.fecha &gt;= '2025-01-01';
-</code></pre>
-            <p class="subtitle">La consulta ignora la ubicación real: <code>@S1</code> y <code>@S2</code> indican sitios físicos distintos, pero el optimizador decide cómo y dónde ejecutar.</p>
-            <div class="note warn">Reto: minimizar el tráfico de red y mantener la coherencia entre nodos.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+            document.getElementById(sectionId).classList.add('active');
 
-  <!-- 2. Diseño -->
-  <section id="diseno">
-    <div class="wrap">
-      <h2>2. Diseño de base de datos distribuidas</h2>
-      <div class="grid">
-        <div class="col-6">
-          <div class="card">
-            <h3>Fragmentación</h3>
-            <p>Dividir una relación en partes llamadas <em>fragmentos</em> conservando reconstrucción por unión/proyección:</p>
-            <table>
-              <thead><tr><th>Tipo</th><th>Idea</th><th>Ventajas</th><th>Cuidados</th></tr></thead>
-              <tbody>
-                <tr><td>Horizontal</td><td>Filas por predicados (p.ej., región)</td><td>Localidad de acceso</td><td>Predicados completos y disjuntos</td></tr>
-                <tr><td>Vertical</td><td>Columnas por grupos de uso</td><td>Menos E/S y exposición</td><td>Incluir clave para <em>recomposición</em></td></tr>
-                <tr><td>Mixta</td><td>Combinación H+V</td><td>Flexibilidad</td><td>Complejidad de catálogo</td></tr>
-              </tbody>
-            </table>
-            <details>
-              <summary>Reglas de corrección</summary>
-              <ul>
-                <li><strong>Completitud</strong>: la unión/recomposición recupera todos los datos.</li>
-                <li><strong>Disyunción</strong> (horizontal): fragmentos sin traslape.</li>
-                <li><strong>Reconstrucción</strong>: existe operación inversa exacta.</li>
-              </ul>
-            </details>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="card">
-            <h3>Asignación y replicación</h3>
-            <ul>
-              <li><strong>Sin réplica</strong>: un fragmento vive en un solo sitio.</li>
-              <li><strong>Réplica completa</strong>: una copia por sitio (máxima disponibilidad, mayor costo de actualización).</li>
-              <li><strong>Réplica parcial</strong>: copias en subconjuntos de sitios (equilibrio).</li>
-              <li><strong>Sincrónica vs. asincrónica</strong> en la propagación de cambios.</li>
-            </ul>
-            <div class="note">Criterios de decisión: patrón de consultas/escrituras, latencias de red, SLAs de consistencia y disponibilidad, costos.</div>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="card">
-            <h3>Ejemplo de diseño</h3>
-<pre><code>// Relación Clientes fragmentada horizontalmente por estado
-C_Noreste  = σ estado IN ('TAM','NL','COA') (Clientes)
-C_Centro   = σ estado IN ('CDMX','MEX','HGO','QRO') (Clientes)
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
 
-// Relación Pedidos fragmentada por año y replicada en S1 y S2
-P_2024@S1, P_2024@S2  // réplica parcial para analítica y resiliencia
-
-// Vertical: Datos sensibles por separado (incluye clave)
-Clientes_pub(id, nombre, estado)
-Clientes_priv(id, rfc, telefono)
-</code></pre>
-            <p>El <strong>catálogo global</strong> mantiene metadatos: predicados, ubicaciones, réplicas y estadísticas para el optimizador.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Actualizaciones -->
-  <section id="actualizaciones">
-    <div class="wrap">
-      <h2>3. Procesamiento de operaciones de actualización distribuidas</h2>
-      <div class="grid">
-        <div class="col-6">
-          <div class="card">
-            <h3>Estrategias de escritura</h3>
-            <ul>
-              <li><strong>Primary‑copy</strong>: todas las escrituras pasan por un primario; réplicas se actualizan desde ahí.</li>
-              <li><strong>Quórums</strong> (R/W): requiere <code>W</code> confirmaciones para escribir y <code>R</code> para leer; garantiza intersección de quórums.</li>
-              <li><strong>Remote‑write</strong>: el cliente escribe directamente en el sitio que aloja el fragmento.</li>
-              <li><strong>Sincrónica vs. eventual</strong>: trade‑off entre latencia y consistencia.</li>
-            </ul>
-            <div class="note warn">Con replicación sincrónica, la latencia de una actualización = latencia del sitio más lento + protocolo de compromiso.</div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="card">
-            <h3>Protocolo 2PC (Two‑Phase Commit)</h3>
-<pre><code>COORDINADOR
-1. &lt;prepare T&gt;  -- pregunta a participantes
-2. Si todos VOTE_COMMIT =&gt; &lt;global_commit&gt;
-   Si alguno VOTE_ABORT  =&gt; &lt;global_abort&gt;
-
-PARTICIPANTE
-1. Al recibir &lt;prepare&gt;: fuerza a log su decisión
-2. Responde VOTE_COMMIT si puede confirmar; de lo contrario VOTE_ABORT
-3. Espera orden global (&lt;commit/abort&gt;) y la registra (WAL)
-</code></pre>
-            <p>Permite <strong>atomicidad</strong> entre sitios. 3PC añade un paso para evitar bloqueos en ciertas fallas pero es menos común.</p>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="card">
-            <h3>Conflictos y recuperación</h3>
-            <ul>
-              <li><strong>Control de concurrencia</strong>: ver sección de transacciones (2PL, timestamps, MVCC).</li>
-              <li><strong>Resolución de conflictos</strong> (asincrónica): última‑escritura‑gana, relojes lógicos/vectoriales, CRDTs.</li>
-              <li><strong>Recuperación</strong>: <em>Write‑Ahead Logging</em> (REDO/UNDO), checkpoints, re‑elección de primarios, re‑sync de réplicas.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Consultas -->
-  <section id="consultas">
-    <div class="wrap">
-      <h2>4. Procesamiento de consultas distribuidas</h2>
-      <div class="grid">
-        <div class="col-8">
-          <div class="card">
-            <h3>Etapas del optimizador distribuido</h3>
-            <ol>
-              <li><strong>Localización</strong>: usar el catálogo para hallar fragmentos y réplicas relevantes.</li>
-              <li><strong>Reescritura</strong>: empujar <em>selects</em>/proyecciones a los sitios de origen; eliminar fragmentos irrelevantes por predicados.</li>
-              <li><strong>Planificación</strong>: elegir <em>join order</em>, operadores (hash/nested loop) y ubicación de cada operador.</li>
-              <li><strong>Minimización de tráfico</strong>: técnicas como <strong>semijoin</strong>, agregación parcial y compresión.</li>
-            </ol>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="card">
-            <h3>Semijoin (idea)</h3>
-<pre><code>// En S1 (Clientes): envia claves candidatas a S2
-π id (σ estado='TAM' Clientes)  -- pequeño
-
-// En S2 (Pedidos): filtra con claves y retorna solo relevantes
-π cliente_id,total (Pedidos ⋉ ids)
-
-// En S1: realiza join final con menos datos
-Clientes_TAM ⋈ Pedidos_filtrados
-</code></pre>
-            <p>Reduce drásticamente datos en tránsito cuando una tabla es grande.</p>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="card">
-            <h3>Modelo de costo simplificado</h3>
-            <ul>
-              <li><strong>Tiempo total ≈</strong> costo CPU/E/S local + <strong>costo de comunicación</strong> (latencia fija + bytes/throughput).</li>
-              <li>Con redes de alta latencia, priorizar planes que <em>eviten mover datos</em> (push‑down, semijoin, agregación local).</li>
-              <li>Usar <strong>estadísticas</strong> de cardinalidad y selectividad actualizadas en el catálogo.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Transacciones -->
-  <section id="transacciones">
-    <div class="wrap">
-      <h2>5. Manejo de transacciones</h2>
-      <div class="grid">
-        <div class="col-6"><div class="card">
-          <h3>ACID distribuido</h3>
-          <ul>
-            <li><strong>Atomicidad</strong>: todo o nada en todos los sitios (2PC).</li>
-            <li><strong>Consistencia</strong>: invariantes globales preservadas.</li>
-            <li><strong>Aislamiento</strong>: serialización aparente (2PL), o niveles controlados (read committed, snapshot).</li>
-            <li><strong>Durabilidad</strong>: confirmaciones persistentes con WAL y réplicas.</li>
-          </ul>
-          <h3>Concurrencia</h3>
-          <ul>
-            <li><strong>2PL (Two‑Phase Locking)</strong>: crece con bloqueos, luego libera. Puede requerir <em>deadlock detection</em> distribuido.</li>
-            <li><strong>Ordenamiento por marcas de tiempo</strong>: rechaza operaciones que violan el orden temporal.</li>
-            <li><strong>MVCC</strong>: lecturas de <em>snapshot</em> reducen contención; coordinar escrituras.</li>
-          </ul>
-        </div></div>
-        <div class="col-6"><div class="card">
-          <h3>Deadlocks y fallos</h3>
-          <ul>
-            <li><strong>Detección</strong>: grafo de espera global; timeouts como respaldo.</li>
-            <li><strong>Recuperación</strong>: abortar víctima con menor costo; <em>replay</em> tras reinicio usando logs.</li>
-            <li><strong>Particiones de red</strong>: degradar a consistencia eventual/solo‑lectura o usar consenso (Paxos/Raft) para elegir líderes.</li>
-          </ul>
-          <table>
-            <thead><tr><th>Técnica</th><th>Pros</th><th>Contras</th></tr></thead>
-            <tbody>
-              <tr><td>2PL estricto</td><td>Alta consistencia</td><td>Bloqueos, riesgo de interbloqueo</td></tr>
-              <tr><td>MVCC + 2PC</td><td>Lecturas rápidas</td><td>GC de versiones, write‑skew</td></tr>
-              <tr><td>Quórums</td><td>Escala y disponibilidad</td><td>Lecturas/escrituras más lentas con quórums altos</td></tr>
-            </tbody>
-          </table>
-        </div></div>
-        <div class="col-12"><div class="card">
-          <h3>Mini‑ejemplo de transacción global</h3>
-<pre><code>// Transferencia entre cuentas en S1 y S2
-BEGIN TRAN T;
-UPDATE Cuentas@S1 SET saldo = saldo - 500 WHERE id = 10;
-UPDATE Cuentas@S2 SET saldo = saldo + 500 WHERE id = 77;
-COMMIT;  -- coordinador ejecuta 2PC con ambos sitios
-</code></pre>
-          <p>Si cualquiera falla antes del <em>commit</em> global, el coordinador ordena <strong>ABORT</strong> para mantener atomicidad.</p>
-        </div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Reflexión personal -->
-  <section id="reflexion">
-    <div class="wrap">
-      <h2>Reflexión personal</h2>
-      <div class="card">
-        <p><em>¿Qué aprendí?</em> Comprendí cómo la distribución física complica, pero también potencia, el rendimiento y la disponibilidad. El diseño (fragmentación/replicación) afecta directamente la ejecución de consultas y el costo de las actualizaciones. Me quedó claro el papel del 2PC para mantener atomicidad entre sitios y cómo técnicas como semijoin reducen tráfico.</p>
-        
-      </div>
-    </div>
-  </section>
-
-  
-
-  <script>
-    // Fecha automática
-    document.getElementById('today').textContent = new Date().toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
-
-    // Tema claro/oscuro
-    const toggle = document.getElementById('toggleTheme');
-    let dark = true;
-    toggle?.addEventListener('click',()=>{
-      dark = !dark;
-      document.documentElement.style.filter = dark? 'none':'invert(1) hue-rotate(180deg)';
-      toggle.textContent = dark? 'Modo claro/oscuro':'Modo claro/oscuro';
-    });
-  </script>
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </body>
 </html>
